@@ -22,10 +22,10 @@
 
 echo "Inicializando script de backup."
 # Diretórios de backup e destino
-diretorio_backup=/home/shaka/Henrique
-incremental_backup=/mnt/backups/incremental
-complete_backup=/mnt/backups/completo
-diferencial_backup=/mnt/backups/diferencial
+diretorio_backup=/caminho/do/diretorio
+incremental_backup=/caminho/do/diretorio
+complete_backup=/caminho/do/diretorio
+diferencial_backup=/caminho/do/diretorio
 
 MENSAGEM_USO="
 Uso: $(basename $0) [OPÇÕES]
