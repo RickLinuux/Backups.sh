@@ -15,17 +15,18 @@
 # Versão 0.03: Adicionando menu de suporte para usuário			    #
 # Versão 0.04: Melhoria no código, deixando-o mais limpo		    #
 # Versão 0.05: Criando funções para deixar o código mais legível            #
-#									    #
+# Versão 0.06: Alteração nas linhas de código, removendo redundância	    #					
+#	       de blocos repetitivos					    #
 #							 	 	    #
 # Uso: ./backup.sh							    #
 #############################################################################
 
 echo "Inicializando script de backup."
 # Diretórios de backup e destino
-diretorio_backup=/caminho/do/diretorio
-incremental_backup=/caminho/do/diretorio
-complete_backup=/caminho/do/diretorio
-diferencial_backup=/caminho/do/diretorio
+diretorio_backup=/home/shaka/Henrique
+incremental_backup=/mnt/backups/incremental
+complete_backup=/mnt/backups/completo
+diferencial_backup=/mnt/backups/diferencial
 
 MENSAGEM_USO="
 Uso: $(basename $0) [OPÇÕES]
@@ -38,35 +39,31 @@ OPÇÕES:
 -d, --diferencial realiza backup diferencial
 "
 
-# funções de auxilio
+# função de auxilio
+# Funções de auxilio
 incremental() {
-if [ -d "$incremental_backup" ]; then
-	echo "Diretório de destino encontrado. Iniciando Backup..."
-	rsync -avh --progress --delete $diretorio_backup $incremental_backup
-	echo "Backup Finalizado."
-else 
-	echo "Diretório não encontrado. Abortando Backup. "
-fi
+    backup $incremental_backup "rsync -avh --progress --delete $diretorio_backup $incremental_backup"
 }
 
 completo() {
-if [ -d "$complete_backup" ]; then
-    echo "Diretório de destino encontrado. Iniciando Backup."
-    rsync -avh --progress $diretorio_backup $complete_backup
-    echo "Backup finalizado."
-else
-    echo "Diretório de destino não encontrado. Abortando Backup."
-fi
+    backup $complete_backup "rsync -avh --progress $diretorio_backup $complete_backup"
 }
 
 diferencial() {
-if [ -d "$diretorio_backup" ]; then 
-	echo "Diretório de destino encontrado. Iniciando Backup..."
-	rsync -avh --link-dest=$diferencial_backup/ultimo --progress $diretorio_backup $diferencial_backup/$(date "+%Y-%m-%d")
-	echo "Backup finalizado."
-else
-    echo "Diretório de origem não encontrado. Abortando Backup."
-fi
+    backup $diferencial_backup "rsync -avh --link-dest=$diferencial_backup/ultimo --progress $diretorio_backup $diferencial_backup/$(date "+%Y-%m-%d")"
+}
+
+backup() {
+    local dir_destino=$1
+    local comando=$2
+
+    if [ -d "$dir_destino" ]; then
+        echo "Diretório de destino encontrado. Iniciando Backup..."
+        eval $comando
+        echo "Backup Finalizado."
+    else 
+        echo "Diretório não encontrado. Abortando Backup."
+    fi
 }
 
 #Tratamento das linhas de comandos
@@ -100,4 +97,3 @@ case "$1" in
 		;;
 	esac 
 done
-
