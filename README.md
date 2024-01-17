@@ -41,3 +41,4 @@ Antes de iniciar o backup, o script verifica se o diretório de destino existe. 
 - Versão 0.03: Adicionando menu de suporte para usuário.
 - Versão 0.04: Melhoria no código, deixando-o mais limpo.
 - Versão 0.05: Criando funções para deixar o código mais legível.
+- Versão 0.06: Alteração nas linhas de código, removendo redundância de blocos repetitivos
